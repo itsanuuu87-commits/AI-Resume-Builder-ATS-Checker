@@ -1,0 +1,1269 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#eaf6ff">
+<title>ResumeCraft | AI Resume Builder & ATS Checker</title>
+
+<style>
+  
+
+:root {
+  --blue: #164e78;
+  --blue-dark: #0b2f4a;
+  --blue-soft: #b7d5eb;
+  --blue-pale: #e4eef6;
+  --text: #172b3b;
+  --muted: #506579;
+  --border: #9ebbd1;
+  --white: #ffffff;
+  --green: #168765;
+  --shadow: 0 5px 24px rgba(11, 47, 74, 0.20);
+}
+
+
+
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--blue-pale);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #b8e1ff;
+  outline-offset: 2px;
+}
+
+.topbar {
+  min-height: 72px;
+  padding: 14px 5%;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 800;
+  color: #3979a7;
+  font-size: 21px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #3979a7;
+  background: #dff1ff;
+  border: 1px solid #cce8fb;
+  font-size: 21px;
+}
+
+.brand small {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status {
+  color: #26815f;
+  background: #eaf8f1;
+  padding: 8px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hero {
+  padding: 35px 5% 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.eyebrow {
+  color: var(--blue-dark);
+  text-transform: uppercase;
+  letter-spacing: 1.7px;
+  font-size: 10px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  color: #315f80;
+  font-size: clamp(27px, 3vw, 36px);
+  letter-spacing: -.8px;
+  margin-bottom: 10px;
+}
+
+.hero h1 span {
+  color: var(--blue-dark);
+}
+
+.hero p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 650px;
+}
+
+.hero-badge {
+  border: 1px solid var(--border);
+  background: white;
+  padding: 15px 18px;
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+}
+
+.hero-badge strong {
+  display: block;
+  color: #3979a7;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(300px, .9fr) minmax(380px, 1.1fr);
+  gap: 22px;
+  padding: 0 5% 40px;
+  align-items: start;
+  max-width: 1700px;
+  margin: auto;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.panel-head {
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fcfeff;
+}
+
+.panel-head h2,
+.preview-toolbar h2 {
+  font-size: 16px;
+  color: #3979a7;
+}
+
+.panel-head p,
+.preview-toolbar p {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.step-number {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  background: #e4f4ff;
+  color: #438fc9;
+  border: 1px solid #d3ecfc;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.form-body {
+  padding: 22px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #3979a7;
+  font-size: 13px;
+  font-weight: 800;
+  margin: 7px 0 15px;
+}
+
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 16px;
+  background: var(--blue);
+  border-radius: 5px;
+}
+
+.section-title:not(:first-child) {
+  margin-top: 26px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+.field {
+  margin-bottom: 15px;
+  min-width: 0;
+}
+
+label {
+  display: block;
+  color: #476177;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+input, textarea, select {
+  display: block;
+  width: 100%;
+  border: 1px solid #dcecf8;
+  border-radius: 8px;
+  background: #fbfdff;
+  color: var(--text);
+  padding: 11px 12px;
+  font-size: 13px;
+  transition: border .2s, box-shadow .2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px #70b8ed25;
+  outline: none;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #a2b3c2;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 95px;
+  line-height: 1.7;
+}
+
+.help {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin-top: 6px;
+}
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  transition: .18s;
+}
+
+.btn:hover {
+  filter: brightness(.97);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: #70b8ed;
+  color: white;
+  border-color: #70b8ed;
+}
+
+.btn-primary:hover {
+  background: #59a8e0;
+}
+
+.btn-dark {
+  background: #dff1ff;
+  color: #3979a7;
+  border-color: #cce8fb;
+}
+
+.btn-light {
+  background: white;
+  color: #477da4;
+  border-color: var(--border);
+}
+
+.btn-soft {
+  background: #edf7ff;
+  color: #438fc9;
+  border-color: #d8edfc;
+}
+
+.full {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions .btn {
+  flex: 1;
+}
+
+.preview-panel {
+  position: sticky;
+  top: 14px;
+}
+
+.preview-toolbar {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+
+.preview-toolbar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.template-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.template-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: white;
+  color: #71869a;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.template-btn.active {
+  background: #e5f4ff;
+  color: #3979a7;
+  border-color: #9dd4f6;
+}
+
+.preview-area {
+  background: #eff8ff;
+  padding: 22px;
+  min-height: 480px;
+}
+
+.resume {
+  background: white;
+  width: 100%;
+  max-width: 720px;
+  min-height: 650px;
+  margin: 0 auto;
+  padding: 38px 39px;
+  border: 1px solid #e5f1fa;
+  box-shadow: 0 3px 18px rgba(65,133,177,.07);
+  overflow-wrap: anywhere;
+  color: #394b5d;
+  font-family: Arial, sans-serif;
+}
+
+.resume-name {
+  font-size: 29px;
+  font-weight: 800;
+  letter-spacing: -.6px;
+  color: #3979a7;
+  line-height: 1.25;
+}
+
+.resume-role {
+  color: #64afe2;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.resume-contact {
+  color: #758b9e;
+  font-size: 10px;
+  line-height: 1.9;
+  margin-top: 13px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #b7e1fb;
+}
+
+.resume-section {
+  margin-top: 22px;
+}
+
+.resume-section h3 {
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  font-size: 11px;
+  color: #438fc9;
+  border-bottom: 1px solid #e1eff9;
+  padding-bottom: 7px;
+  margin-bottom: 9px;
+}
+
+.resume-section p {
+  font-size: 11px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  color: #45596d;
+}
+
+.resume-empty {
+  min-height: 460px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #8ba2b6;
+  line-height: 1.9;
+  font-size: 13px;
+}
+
+.resume-empty strong {
+  display: block;
+  color: #3979a7;
+  font-size: 17px;
+}
+
+.preview-actions {
+  padding: 17px 20px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.preview-actions .btn {
+  flex: 1;
+}
+
+.tip {
+  margin: 0 20px 19px;
+  background: #f5fbff;
+  border: 1px solid #e1eff9;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #7890a5;
+  line-height: 1.7;
+}
+
+.tip strong {
+  color: #3979a7;
+}
+
+.ats-panel {
+  margin-top: 20px;
+}
+
+.ats-content {
+  padding: 20px;
+}
+
+.ats-content textarea {
+  min-height: 125px;
+}
+
+.score-card {
+  background: #f6fbff;
+  border: 1px solid #dcecf8;
+  border-radius: 12px;
+  padding: 17px;
+  margin-top: 17px;
+}
+
+.score-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.score-top strong {
+  color: #3979a7;
+  font-size: 13px;
+}
+
+.score-value {
+  font-size: 27px;
+  font-weight: 800;
+  color: #59a8e0;
+}
+
+.progress {
+  height: 8px;
+  background: #dfedf8;
+  border-radius: 10px;
+  margin-top: 13px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0;
+  height: 100%;
+  background: #70b8ed;
+  transition: width .3s;
+}
+
+.ats-result {
+  margin-top: 14px;
+  color: #687f93;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.keyword-group {
+  margin-top: 14px;
+}
+
+.keyword-group strong {
+  display: block;
+  font-size: 11px;
+  color: #3979a7;
+  margin-bottom: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-block;
+  padding: 5px 8px;
+  background: #e7f8ef;
+  color: #16734e;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+.chip.missing {
+  background: #fff0e8;
+  color: #a95022;
+}
+
+.disclaimer {
+  margin-top: 13px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 11px;
+  color: #8ba0b2;
+  background: white;
+  border-top: 1px solid var(--border);
+}
+
+/* MODERN TEMPLATE */
+.resume.template-modern {
+  border-top: 8px solid #9bd6f8;
+  padding-top: 31px;
+}
+
+.resume.template-modern .resume-name {
+  color: #3d8fc9;
+}
+
+.resume.template-modern .resume-contact {
+  border-bottom: 1px solid #dcecf8;
+}
+
+/* CLASSIC TEMPLATE */
+.resume.template-classic .resume-name {
+  color: #395b74;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.resume.template-classic .resume-role {
+  text-align: center;
+  color: #679bbd;
+}
+
+.resume.template-classic .resume-contact {
+  text-align: center;
+  border-bottom: 1px solid #bddced;
+}
+
+.resume.template-classic .resume-section h3 {
+  color: #3979a7;
+  border-bottom: 1px solid #cde5f5;
+}
+
+/* PDF PRINT SETTINGS */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  .topbar, .hero, .form-panel, .preview-toolbar,
+  .preview-actions, .tip, .ats-panel, footer {
+    display: none !important;
+  }
+
+  .workspace {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .preview-panel, .panel {
+    position: static !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  .preview-area {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+    background: white !important;
+  }
+
+  .resume {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .resume-section {
+    break-inside: avoid;
+  }
+}
+
+@media (max-width: 1050px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+  .preview-panel {
+    position: static;
+  }
+
+  .preview-area {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    padding: 12px 15px;
+    min-height: 62px;
+  }
+
+  .brand {
+    font-size: 17px;
+  }
+
+  .status {
+    display: none;
+  }
+
+  .hero {
+    padding: 25px 16px 20px;
+  }
+
+  .hero-badge {
+    display: none;
+  }
+
+  .workspace {
+    padding: 0 12px 25px;
+    gap: 15px;
+  }
+
+  .panel-head {
+    padding: 17px;
+  }
+
+  .form-body {
+    padding: 17px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .preview-toolbar {
+    padding: 15px;
+  }
+
+  .preview-area {
+    padding: 9px;
+  }
+
+  .resume {
+    padding: 22px 18px;
+    min-height: 500px;
+  }
+
+  .resume-name {
+    font-size: 24px;
+  }
+
+  .preview-actions {
+    padding: 13px;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 11px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">R</div>
+    <div>
+      ResumeCraft
+      <small>RESUME STUDIO</small>
+    </div>
+  </div>
+
+  <div class="top-right">
+    <span class="status">● Ready to build</span>
+    <button class="btn btn-light" id="topSample" type="button">
+      Load Sample
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Career tools / Resume studio</div>
+    <h1>Build your <span>next opportunity.</span></h1>
+    <p>Create a professional resume, preview it instantly and compare it with a target job description.</p>
+  </div>
+
+  <div class="hero-badge">
+    YOUR WORKSPACE
+    <strong>Resume Builder + ATS</strong>
+  </div>
+</section>
+
+<main class="workspace">
+
+  <!-- RESUME FORM -->
+  <section class="panel form-panel">
+    <div class="panel-head">
+      <div>
+        <h2>Resume details</h2>
+        <p>Complete the fields you want to include.</p>
+      </div>
+      <div class="step-number">01</div>
+    </div>
+
+    <div class="form-body">
+      <form id="resumeForm" autocomplete="on">
+
+        <div class="section-title">Personal information</div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="name">Full name *</label>
+            <input id="name" placeholder="e.g. Urooj Khan" required>
+          </div>
+
+          <div class="field">
+            <label for="role">Professional title</label>
+            <input id="role" placeholder="e.g. Web Developer">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" type="email" placeholder="you@example.com">
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" type="tel" placeholder="+92 ...">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="location">Location</label>
+          <input id="location" placeholder="City, Country">
+        </div>
+
+        <div class="section-title">Professional profile</div>
+
+        <div class="field">
+          <label for="summary">Professional summary</label>
+          <textarea id="summary" placeholder="Write 2–4 sentences about your strengths and career goals..."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="skills">Skills</label>
+          <textarea id="skills" placeholder="HTML, CSS, JavaScript, Communication, Research"></textarea>
+          <p class="help">Separate skills with commas or put each skill on a new line.</p>
+        </div>
+
+        <div class="section-title">Education & experience</div>
+
+        <div class="field">
+          <label for="education">Education</label>
+          <textarea id="education" placeholder="Degree or qualification&#10;Institute name | Years"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="experience">Work experience</label>
+          <textarea id="experience" placeholder="Job title | Company | Dates&#10;Describe responsibilities and achievements."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="projects">Projects</label>
+          <textarea id="projects" placeholder="Project name&#10;What you built and which technologies you used."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="certifications">Certifications & additional information</label>
+          <textarea id="certifications" placeholder="Certifications, languages, volunteering or achievements..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="button" id="checkFromForm">Check ATS</button>
+          <button class="btn btn-light" type="reset">Clear form</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- LIVE PREVIEW -->
+  <section class="panel preview-panel">
+    <div class="preview-toolbar">
+      <div class="preview-toolbar-top">
+        <div>
+          <h2>Live resume preview</h2>
+          <p>Your changes appear here automatically.</p>
+        </div>
+        <span class="status">● Live</span>
+      </div>
+
+      <div class="template-row">
+        <button type="button" class="template-btn active" data-template="professional">Professional</button>
+        <button type="button" class="template-btn" data-template="modern">Modern</button>
+        <button type="button" class="template-btn" data-template="classic">Classic</button>
+      </div>
+    </div>
+
+    <div class="preview-area">
+      <article id="resume" class="resume template-professional">
+        <div class="resume-empty">
+          <div>
+            <strong>Your resume starts here.</strong>
+            Fill in your details on the left to see your professional resume.
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="preview-actions">
+      <button class="btn btn-primary" type="button" id="pdfBtn">↓ Save as PDF</button>
+      <button class="btn btn-light" type="button" id="sampleBtn">Try sample</button>
+    </div>
+
+    <div class="tip">
+      <strong>PDF tip:</strong> Select “Save as PDF” in the print window. Enable background graphics if that option is available.
+    </div>
+  </section>
+
+  <!-- ATS CHECKER -->
+  <section class="panel ats-panel">
+    <div class="panel-head">
+      <div>
+        <h2>ATS keyword checker</h2>
+        <p>Compare your resume with a job description.</p>
+      </div>
+      <div class="step-number">02</div>
+    </div>
+
+    <div class="ats-content">
+      <div class="field">
+        <label for="job">Target job description</label>
+        <textarea id="job" placeholder="Paste the job description here. Include the role, skills and requirements..."></textarea>
+      </div>
+
+      <button type="button" class="btn btn-primary full" id="atsBtn">
+        Analyze keyword match
+      </button>
+
+      <div class="score-card" aria-live="polite">
+        <div class="score-top">
+          <strong>Resume keyword match</strong>
+          <span class="score-value" id="score">--%</span>
+        </div>
+
+        <div class="progress">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="ats-result" id="atsResult">
+          Add a job description and select Analyze keyword match to begin.
+        </div>
+
+        <div id="keywordLists"></div>
+      </div>
+
+      <p class="disclaimer">
+        This is a basic keyword comparison tool, not an official ATS score. It does not connect to employer systems or guarantee interviews. Add missing skills only if they accurately describe you.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  ResumeCraft Studio · Built with HTML, CSS & JavaScript
+</footer>
+
+<script>
+"use strict";
+
+const fieldIds = [
+  "name", "role", "email", "phone", "location",
+  "summary", "skills", "education", "experience",
+  "projects", "certifications"
+];
+
+const $ = id => document.getElementById(id);
+
+let selectedTemplate = "professional";
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function formattedText(value) {
+  return escapeHTML(value).replace(/\n/g, "<br>");
+}
+
+function sectionHTML(title, value) {
+  if (!value.trim()) return "";
+
+  return `
+    <section class="resume-section">
+      <h3>${escapeHTML(title)}</h3>
+      <p>${formattedText(value)}</p>
+    </section>
+  `;
+}
+
+function getResumeText() {
+  return [
+    $("role").value,
+    $("summary").value,
+    $("skills").value,
+    $("education").value,
+    $("experience").value,
+    $("projects").value,
+    $("certifications").value
+  ].join("\n");
+}
+
+function updatePreview() {
+  const values = {};
+
+  fieldIds.forEach(id => {
+    values[id] = $(id).value.trim();
+  });
+
+  const hasContent = fieldIds.some(id => values[id]);
+
+  if (!hasContent) {
+    $("resume").className = "resume template-" + selectedTemplate;
+    $("resume").innerHTML = `
+      <div class="resume-empty">
+        <div>
+          <strong>Your resume starts here.</strong>
+          Fill in your details on the left to see your professional resume.
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const contact = [
+    values.email,
+    values.phone,
+    values.location
+  ].filter(Boolean).map(escapeHTML).join(" | ");
+
+  $("resume").className = "resume template-" + selectedTemplate;
+
+  $("resume").innerHTML = `
+    <header class="resume-header">
+      <div class="resume-name">${escapeHTML(values.name || "Your Name")}</div>
+      <div class="resume-role">${escapeHTML(values.role || "Professional Title")}</div>
+      <div class="resume-contact">${contact || "Email | Phone | Location"}</div>
+    </header>
+
+    ${sectionHTML("Professional Summary", values.summary)}
+    ${sectionHTML("Skills", values.skills)}
+    ${sectionHTML("Education", values.education)}
+    ${sectionHTML("Work Experience", values.experience)}
+    ${sectionHTML("Projects", values.projects)}
+    ${sectionHTML("Certifications & Additional Information", values.certifications)}
+  `;
+}
+
+fieldIds.forEach(id => {
+  $(id).addEventListener("input", updatePreview);
+});
+
+/* TEMPLATE SWITCHER */
+document.querySelectorAll(".template-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    selectedTemplate = button.dataset.template;
+
+    document.querySelectorAll(".template-btn").forEach(btn => {
+      btn.classList.toggle("active", btn === button);
+    });
+
+    updatePreview();
+  });
+});
+
+/* ATS KEYWORD CHECKER */
+const stopWords = new Set([
+  "the", "and", "for", "with", "you", "your", "are", "our",
+  "this", "that", "will", "from", "have", "has", "was", "were",
+  "who", "what", "can", "all", "not", "but", "job", "role",
+  "work", "their", "they", "about", "into", "its", "able",
+  "ability", "years", "year", "looking", "seeking", "candidate",
+  "candidates", "required", "requirements", "responsibilities",
+  "including", "such", "also", "more", "than", "within", "must",
+  "should", "preferred", "good", "strong", "using", "use",
+  "join", "team", "company", "position"
+]);
+
+function normalizeWords(text) {
+  return (text.toLowerCase().match(/[a-z][a-z+#.-]{1,}/g) || [])
+    .map(word => word.replace(/^[.-]+|[.-]+$/g, ""))
+    .filter(word => word.length >= 3 && !stopWords.has(word));
+}
+
+function analyzeATS() {
+  const job = $("job").value.trim();
+
+  if (!job) {
+    $("score").textContent = "--%";
+    $("progressFill").style.width = "0%";
+    $("atsResult").textContent =
+      "Please paste a target job description first.";
+    $("keywordLists").innerHTML = "";
+    $("job").focus();
+    return;
+  }
+
+  const resumeText = getResumeText().toLowerCase();
+  const keywords = [...new Set(normalizeWords(job))];
+
+  if (!keywords.length) {
+    $("score").textContent = "--%";
+    $("progressFill").style.width = "0%";
+    $("atsResult").textContent =
+      "Please enter a longer job description with relevant skills.";
+    $("keywordLists").innerHTML = "";
+    return;
+  }
+
+  const matched = keywords.filter(word => resumeText.includes(word));
+  const missing = keywords.filter(word => !resumeText.includes(word));
+  const score = Math.round((matched.length / keywords.length) * 100);
+
+  $("score").textContent = score + "%";
+  $("progressFill").style.width = score + "%";
+
+  let advice;
+
+  if (score >= 75) {
+    advice = "Good keyword coverage. Review your resume for accuracy and clarity.";
+  } else if (score >= 45) {
+    advice = "Some keywords match. Review missing terms and update relevant sections.";
+  } else {
+    advice = "Keyword coverage is limited. Compare the job requirements with your genuine skills and experience.";
+  }
+
+  $("atsResult").innerHTML =
+    `<strong>${matched.length} of ${keywords.length} keywords matched.</strong><br>${escapeHTML(advice)}`;
+
+  const matchedHTML = matched.length
+    ? matched.slice(0, 30).map(word =>
+        `<span class="chip">${escapeHTML(word)}</span>`).join("")
+    : '<span class="help">No keywords matched yet.</span>';
+
+  const missingHTML = missing.length
+    ? missing.slice(0, 30).map(word =>
+        `<span class="chip missing">${escapeHTML(word)}</span>`).join("")
+    : '<span class="help">No missing keywords from this list.</span>';
+
+  $("keywordLists").innerHTML = `
+    <div class="keyword-group">
+      <strong>Matched keywords</strong>
+      <div class="chips">${matchedHTML}</div>
+    </div>
+    <div class="keyword-group">
+      <strong>Keywords to review</strong>
+      <div class="chips">${missingHTML}</div>
+    </div>
+  `;
+}
+
+$("atsBtn").addEventListener("click", analyzeATS);
+
+$("checkFromForm").addEventListener("click", () => {
+  $("job").scrollIntoView({ behavior: "smooth", block: "center" });
+  $("job").focus();
+  analyzeATS();
+});
+
+/* PDF DOWNLOAD */
+$("pdfBtn").addEventListener("click", () => {
+  if (!$("name").value.trim()) {
+    alert("Please enter your full name before saving your resume.");
+    $("name").focus();
+    return;
+  }
+
+  updatePreview();
+  window.print();
+});
+
+/* SAMPLE DATA */
+function loadSample() {
+  const sample = {
+    name: "Urooj Khan",
+    role: "Entry-Level Web Developer",
+    email: "your-email@example.com",
+    phone: "",
+    location: "Swat, Pakistan",
+    summary:
+      "Motivated entry-level web developer interested in building responsive, user-friendly websites. Familiar with HTML, CSS and JavaScript, with practice creating personal projects. Eager to learn, solve problems and contribute to a collaborative team.",
+    skills:
+      "HTML, CSS, JavaScript, Responsive Web Design, GitHub, Problem Solving, Communication, Microsoft Word, Research",
+    education:
+      "BS Sociology\nJahanzeb College of Swat | 2024–2028",
+    experience:
+      "Personal Learning & Practice\nIndependent Web Development Projects\nCreated practice websites using HTML, CSS and JavaScript. Tested page layouts, improved mobile responsiveness and published projects using GitHub Pages.",
+    projects:
+      "Personal Portfolio Website\nBuilt a portfolio to showcase web projects using HTML, CSS and JavaScript.\n\nCurrency Converter\nPracticed JavaScript event handling and interactive user interfaces.",
+    certifications:
+      "Languages: English, Urdu\nInterests: Web development, research and continuous learning."
+  };
+
+  fieldIds.forEach(id => {
+    $(id).value = sample[id] || "";
+  });
+
+  updatePreview();
+}
+
+$("sampleBtn").addEventListener("click", loadSample);
+$("topSample").addEventListener("click", loadSample);
+
+/* RESET FORM AND ATS RESULTS */
+$("resumeForm").addEventListener("reset", () => {
+  setTimeout(() => {
+    updatePreview();
+
+    $("score").textContent = "--%";
+    $("progressFill").style.width = "0%";
+
+    $("atsResult").textContent =
+      "Add a job description and select Analyze keyword match to begin.";
+
+    $("keywordLists").innerHTML = "";
+  }, 0);
+});
+
+updatePreview();
+</script>
+
+</body>
+</html>
